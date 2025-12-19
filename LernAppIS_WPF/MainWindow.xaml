@@ -1,0 +1,330 @@
+﻿<Window x:Class="LernAppIS_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LernAppIS_WPF"
+        mc:Ignorable="d"
+        Title="Interaktive LernApp" Height="600" Width="900">
+    <DockPanel>
+        <!-- Menü oben -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Themen">
+                <MenuItem Header="WPF/XAML" Click="MenuItem_Click"/>
+                <MenuItem Header=".NET" Click="MenuItem_Click"/>
+                <MenuItem Header="C#" Click="MenuItem_Click"/>
+                <MenuItem Header="All in One" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Statusleiste unten -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Name="StatusText" Text="Frage 1 von 2"/>
+        </StatusBar>
+
+        <!-- Hauptinhalt -->
+        <Grid Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Linke Seitenleiste: Fragenliste -->
+            <ListBox Name="FragenListe" Grid.Column="0" SelectionChanged="FragenListe_SelectionChanged">
+                
+                <ListBox.Background>
+                    <VisualBrush Stretch="UniformToFill" Opacity="0.3">
+                        <VisualBrush.Visual>
+                            <Grid>
+                                <!-- Hintergrundbild -->
+                                <Image Source="/bilder/books-2596809_1280.jpg" Stretch="UniformToFill"/>
+                                <!-- Abdunkelung -->
+                                <Rectangle Fill="Black" Opacity="0.4"/>
+                            </Grid>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </ListBox.Background>
+
+
+
+                <ListBox.Resources>
+                    <CollectionViewSource x:Key="FragenView" Source="{Binding}">
+                        <CollectionViewSource.GroupDescriptions>
+                            <PropertyGroupDescription PropertyName="Kategorie"/>
+                        </CollectionViewSource.GroupDescriptions>
+                    </CollectionViewSource>
+                </ListBox.Resources>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Titel}" TextWrapping="Wrap" Margin="2"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" 
+                               FontWeight="Bold" 
+                               FontSize="14" 
+                               Background="LightGray" 
+                               Padding="4" 
+                               Margin="0,5,0,0"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+
+                <!-- ItemStyle für farbliche Absetzung -->
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="DarkGray"/>
+                        <Setter Property="Margin" Value="1"/>
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="BorderThickness" Value="1"/>
+                        <Setter Property="BorderBrush" Value="LightGray"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+
+            <!-- Rechter Bereich: Tabs -->
+            <TabControl Name="TabBereich" Grid.Column="1">
+                
+
+                <!-- WPF/XAML Tab -->
+                <TabItem Header="WPF/XAML">
+                  
+                    <ScrollViewer>
+                        <StackPanel Name="WPFContentPanel">
+                            <TextBlock Text="Einführung in WPF/XAML" FontWeight="Bold" FontSize="16"/>
+                            <StackPanel Margin="5">
+                                <TextBlock Text="WPF / XAML – Übersicht"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                                <ListBox>
+                                    <ListBoxItem>💠WPF ist ein UI-Framework für Windows-Desktopanwendungen</ListBoxItem>
+                                    <ListBoxItem>💠XAML beschreibt die Benutzeroberfläche deklarativ</ListBoxItem>
+                                    <ListBoxItem>💠Trennung von Oberfläche (XAML) und Logik (C#)</ListBoxItem>
+                                    <ListBoxItem>💠Unterstützt Styles, Templates und Animationen</ListBoxItem>
+                                    <ListBoxItem>💠Flexibles Layout mit Grid, StackPanel, DockPanel</ListBoxItem>
+                                </ListBox>
+                             
+                            </StackPanel>
+                           
+                            <Image Source="/bilder/WPF_Erklaerung.jpg" Height="300"/>
+                            
+                            <Expander Header="Frage 1: Was ist XAML?">
+                                <StackPanel>
+                                    <TextBlock Text="Antwort: XAML ist die Markup-Sprache für WPF-Oberflächen."/>
+                                    <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <Expander Header="Frage 2: Wofür benutz man Grid?" IsExpanded="False" Margin="5">
+                                <StackPanel>
+                                    <TextBlock Text="Antwort: Grid dient zum Anordnen von Containern und Controls in Zeilen und Spalten." TextWrapping="Wrap"/>
+                                    <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- .NET Tab -->
+                <TabItem Header=".NET">
+                    <ScrollViewer>
+                        <StackPanel Name="DotNetContentPanel" Margin="10">
+                            <TextBlock Text="Einführung in .NET" FontWeight="Bold" FontSize="16"/>
+
+                            <Image Source="/bilder/DotNET_Bild1.png" Height="200" Margin="5"/>
+                            
+                            <StackPanel Margin="5">
+                                <TextBlock Text="Übersicht"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                                <ListBox>
+                                    <ListBoxItem>💠.NET ist eine Entwicklungsplattform von Microsoft</ListBoxItem>
+                                    <ListBoxItem>💠Stellt Laufzeitumgebung (CLR) bereit</ListBoxItem>
+                                    <ListBoxItem>💠Verwaltet Speicher (Garbage Collection)</ListBoxItem>
+                                    <ListBoxItem>💠Unterstützt mehrere Programmiersprachen</ListBoxItem>
+                                    <ListBoxItem>💠Basis für WPF-, Web- und Konsolenanwendungen</ListBoxItem>
+                                </ListBox>
+                            </StackPanel>
+
+                            
+                            <Image Source="/bilder/DotNet_Bild2.png" Height="250" Margin="5"/>
+
+                            <Expander Header="Frage 1: Was ist .NET?" IsExpanded="False" Margin="5">
+                                <StackPanel>
+                                    <TextBlock Text="Antwort: .NET ist ein Framework von Microsoft zur Entwicklung von Anwendungen." TextWrapping="Wrap"/>
+                                    <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+                            
+                            <Expander Header="Frage 2: Was ist CLR?" IsExpanded="False" Margin="5">
+                                <StackPanel>
+                                    <TextBlock Text="Antwort: CLR ist die Common Language Runtime, die die Ausführung von .NET-Anwendungen übernimmt." TextWrapping="Wrap"/>
+                                    <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+                            
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- C# Tab -->
+                <TabItem Header="C#">
+                    <ScrollViewer>
+                        <StackPanel Name="CSharpContentPanel" Margin="10">
+                          <TextBlock Text="Einführung in C#" FontWeight="Bold" FontSize="16"/>
+                            <Image Source="/bilder/CSharp_Bild1.jpg" Height="100" Margin="5"/>
+
+                            <StackPanel Margin="5">
+                                <TextBlock Text="Übersicht"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                                <ListBox>
+                                    <ListBoxItem>💠C# ist eine objektorientierte Programmiersprache</ListBoxItem>
+                                    <ListBoxItem>💠Wird häufig mit .NET verwendet</ListBoxItem>
+                                    <ListBoxItem>💠Unterstützt Klassen, Methoden und Vererbung</ListBoxItem>
+                                    <ListBoxItem>💠Starke Typisierung erhöht Code-Sicherheit</ListBoxItem>
+                                    <ListBoxItem>💠Ereignisgesteuerte Programmierung (Events)</ListBoxItem>
+                                </ListBox>
+                            </StackPanel>
+
+                            <Image Source="/bilder/CSharp_Bild2.png" Height="200" Margin="5"/>
+
+                        <Expander Header="Frage 1: Was ist eine Klasse?" IsExpanded="False" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Antwort: Eine Klasse ist ein Bauplan für Objekte in C#." TextWrapping="Wrap"/>
+                                <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <Expander Header="Frage 2: Was ist eine Methode?" IsExpanded="False" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="Antwort: Eine Methode ist eine Funktion innerhalb einer Klasse." TextWrapping="Wrap"/>
+                                <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- All in One Tab -->
+                <TabItem Header="All in One">
+                    <ScrollViewer>
+                        <StackPanel Name="AllInOnePanel" Margin="10">
+                            <TextBlock Text="All in One Lernbereich" FontWeight="Bold" FontSize="16"/>
+                            <TextBlock Text="Hier werden nun Inhalte aus WPF, .NET und C# kombiniert." TextWrapping="Wrap" Margin="5"/>
+
+                            <StackPanel Margin="5">
+                                <TextBlock Text="Übersicht"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5"/>
+
+                                <ListBox>
+                                    <ListBoxItem>💠WPF erstellt die grafische Oberfläche</ListBoxItem>
+                                    <ListBoxItem>💠XAML beschreibt das Layout der Anwendung</ListBoxItem>
+                                    <ListBoxItem>💠.NET stellt Laufzeit und Infrastruktur bereit</ListBoxItem>
+                                    <ListBoxItem>💠C# implementiert die Programmlogik</ListBoxItem>
+                                    <ListBoxItem>💠Zusammenspiel aller Komponenten ergibt eine Windows-App</ListBoxItem>
+                                </ListBox>
+                            </StackPanel>
+
+                            <Image Source="/bilder/AllInOne_erklaerung.png" Height="350" Margin="5"/>
+                            
+                            <TextBlock Text="Mit Hilfe von WPF, .NET, XAML und C# lassen sich tolle Windows Apps erstellen." TextWrapping="Wrap" Margin="5"/>
+                            
+                            <Expander Header="Frage 1: Zeigen Sie den Einsatz von Attached Properties und Property-Elemente-Syntax." IsExpanded="False" Margin="5">
+                                <StackPanel>
+                                    <TextBlock Text="Antwort: Attached Properties sind spezielle Eigenschaften, die von einem Container auf seine Kinder angewendet werden können, auch wenn die Kinder die Eigenschaft selbst gar nicht besitzen."
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="Beispiel in meinem Code: die Grid.Columns in ListBox und TabControl sind Attached Properties. Die ColumnDefintion definiert das Grid, aber die ListBox weiß nicht automatisch, in welcher Spalte sie stehen soll, dass wird dann über die Attached Property 'Grid Column' gesteuert."
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="Attached Properties werden oft von Layout-Containern verwendet (Grid, Canvas, DockPanel) um Positionierungen zu steuern."
+           TextWrapping="Wrap"/>
+                                    <CheckBox Content="Verstanden" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+                            <Image Source="/bilder/AllInOne_Bild2.png" Height="300" Margin="5"/>
+                            
+                            <Expander Header="Frage 2: Erklären Sie DependencyProperties." IsExpanded="False" Margin="5">
+                                <StackPanel>
+                                    <TextBlock TextWrapping="Wrap" Margin="5">
+                                        <TextBlock.Inlines>
+                                            <Run Text="Antwort: DependencyProperties(DP) " FontWeight="Bold"/> 
+                                            <Run Text="sind eine wichtige Konzeption in der Windows Presentation Foundation (WPF) und bieten eine effiziente Möglichkeit, Eigenschaften zu speichern und zu verwalten. Sie ermöglichen es, Werte von Objekten zu speichern und zu berechnen, ohne dass die Objekte selbst berechnet werden müssen. Dies führt zu einer Reduzierung der Speicherressourcen und zu einer Verbesserung der Leistung. DependencyProperties sind auch wichtig für die Implementierung von WPF-Datenbindung, Animationen und Styles. Sie sind in der Regel statische Mitglieder der Klasse, die von der Klasse DependencyObject abgeleitet ist, und unterstützen die Vererbung von Eigenschaftswerten zwischen übergeordneten Elementen."/>
+                                            <LineBreak/>
+                                            <LineBreak/>
+                                            <Run Text="(Erklärung von KI 😉)" FontStyle="Italic"/>
+                                            <LineBreak/>
+                                            <LineBreak/>
+                                            <Run Text="Ist eine Alternative zur Attribut-Syntax in XAML. -Man kann damit komplexe Objekte einer Eigenschaft zuweisen. Für einen Expander in meiner XAML könnte ich zum Beispiel nutzen. Weil 'Expander.Header' ein Objekt und nicht nur ein String ist. ➡️ Aktuelles Beispiel in meinem Code: ist in C# 'StatusText.Text = $Ausgewählte Frag...'. Hier ist Text eine DP von TextBlock."/>
+                                            <LineBreak/>
+                                            <LineBreak/>
+                                            <Run Text="DP sind spezielle Properties in WPF, die von der WPF-Infrastruktur verwaltet weren. Vorteile: - Autmatisches Binding, -Automatisches Styling/Theming, - Animationen und Trigger, - Standardwerte, Wertvererbung und Validierung."/>
+                                        </TextBlock.Inlines>
+                                    </TextBlock>
+                                    <CheckBox Content="Verstanden" Margin="5" Checked="Verstanden_Checked"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <TextBlock Text="Zusammenfassung der Themen"
+                             FontSize="16"
+                            FontWeight="Bold"
+                               Margin="5"/>
+
+                            <Grid Margin="5">
+                                <!-- Spalten -->
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="200"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Zeilen -->
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Header -->
+                                <TextBlock Text="Thema" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                                <TextBlock Text="Beschreibung" FontWeight="Bold" Grid.Row="0" Grid.Column="1"/>
+                                <TextBlock Text="Typische Nutzung" FontWeight="Bold" Grid.Row="0" Grid.Column="2"/>
+
+                                <!-- WPF -->
+                                <TextBlock Text="WPF" Grid.Row="1" Grid.Column="0"/>
+                                <TextBlock Text="UI-Framework mit XAML" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap"/>
+                                <TextBlock Text="Desktop-Oberflächen" Grid.Row="1" Grid.Column="2"/>
+
+                                <!-- .NET -->
+                                <TextBlock Text=".NET" Grid.Row="2" Grid.Column="0"/>
+                                <TextBlock Text="Plattform und Laufzeitumgebung" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap"/>
+                                <TextBlock Text="Anwendungslogik" Grid.Row="2" Grid.Column="2"/>
+
+                                <!-- C# -->
+                                <TextBlock Text="C#" Grid.Row="3" Grid.Column="0"/>
+                                <TextBlock Text="Programmiersprache" Grid.Row="3" Grid.Column="1"/>
+                                <TextBlock Text="Code und Klassen" Grid.Row="3" Grid.Column="2"/>
+                            </Grid>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</Window>
