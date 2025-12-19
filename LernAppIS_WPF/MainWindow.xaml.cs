@@ -28,6 +28,8 @@ namespace LernAppIS_WPF
             Fragen.Add(new Frage { Kategorie = ".NET", Titel = "Frage 2: Was ist CLR?" });
             Fragen.Add(new Frage { Kategorie = "C#", Titel = "Frage 1: Was ist eine Klasse?" });
             Fragen.Add(new Frage { Kategorie = "C#", Titel = "Frage 2: Was ist eine Methode?" });
+            Fragen.Add(new Frage { Kategorie = "All in One", Titel = "Frage 1: Zeigen Sie den Einsatz von Attached Properties und Property-Elemente-Syntax." });
+            Fragen.Add(new Frage { Kategorie = "All in One", Titel = "Frage 2: Erklären Sie DependencyProperties." });
 
             FragenListe.ItemsSource = Fragen;
         }
@@ -54,45 +56,52 @@ namespace LernAppIS_WPF
                 }
             }
         }
-
-        // Wenn eine Frage in der ListBox ausgewählt wird: Fragenliste SelectionChanged
+        // Überarbeitetes SelectionChanged Event
         private void FragenListe_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (FragenListe.SelectedItem == null) return;
+            if (FragenListe.SelectedItem == null)
+                return;
 
-            string ausgewählteFrage = FragenListe.SelectedItem.ToString();
-            StatusText.Text = $"Ausgewählte Frage: {ausgewählteFrage}";
+            // Cast SelectedItem auf Frage
+            var ausgewählteFrage = FragenListe.SelectedItem as Frage;
+            if (ausgewählteFrage == null) return;
 
-            // Wähle StackPanel basierend auf TabIndex oder Frage
+            StatusText.Text = $"Ausgewählte Frage: {ausgewählteFrage.Titel}";
+
+            // Wähle StackPanel basierend auf Kategorie
             StackPanel panel = null;
-
-            if (ausgewählteFrage.Contains("XAML") || ausgewählteFrage.Contains("Grid"))
+            if (ausgewählteFrage.Kategorie == "WPF/XAML")
                 panel = WPFContentPanel;
-            else if (ausgewählteFrage.Contains(".NET") || ausgewählteFrage.Contains("CLR"))
+            else if (ausgewählteFrage.Kategorie == ".NET")
                 panel = DotNetContentPanel;
-            else if (ausgewählteFrage.Contains("Klasse") || ausgewählteFrage.Contains("Methode"))
+            else if (ausgewählteFrage.Kategorie == "C#")
                 panel = CSharpContentPanel;
             else
                 panel = AllInOnePanel;
 
-            // Alle Expander durchlaufen
-            foreach (var child in panel.Children)
+            // Alle Expander durchlaufen und passenden öffnen
+            foreach (UIElement child in panel.Children)
             {
-                if (child is Expander expander)
+                Expander expander = child as Expander;
+                if (expander != null)
                 {
-                    if (expander.Header.ToString() == ausgewählteFrage)
+                    if (expander.Header.ToString() == ausgewählteFrage.Titel)
                         expander.IsExpanded = true;
                     else
                         expander.IsExpanded = false;
                 }
             }
 
-            // Optional: Tab wechseln, damit der passende Tab angezeigt wird
-            if (panel == WPFContentPanel) TabBereich.SelectedIndex = 0;
-            else if (panel == DotNetContentPanel) TabBereich.SelectedIndex = 1;
-            else if (panel == CSharpContentPanel) TabBereich.SelectedIndex = 2;
-            else TabBereich.SelectedIndex = 3;
-        }
+            // Tab wechseln
+             if (ausgewählteFrage.Kategorie == "WPF/XAML")
+                TabBereich.SelectedIndex = 0;
+            else if (ausgewählteFrage.Kategorie == ".NET")
+                 TabBereich.SelectedIndex = 1;
+            else if (ausgewählteFrage.Kategorie == "C#")
+                TabBereich.SelectedIndex = 2;
+            else
+                TabBereich.SelectedIndex = 3;
+            }
 
         // Checkbox Event
         private void Verstanden_Checked(object sender, RoutedEventArgs e)
